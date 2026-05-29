@@ -50,16 +50,16 @@ try:
 except Exception as e:
     print(f"Cumulative failed: {e}"); gold = []
 
-# Latest deltas
+# All deltas
 try:
     r = requests.get(f"https://huggingface.co/api/datasets/{HF_DATASET}", timeout=30)
     deltas = sorted([s["rfilename"] for s in r.json().get("siblings",[])
-                     if "teacher_gold/deltas/gold_v6_" in s["rfilename"]], reverse=True)[:5]
+                     if "teacher_gold/deltas/gold_v6_" in s["rfilename"]], reverse=True)
     for d in deltas:
         try:
             gold.extend(download_jsonl(f"https://huggingface.co/datasets/{HF_DATASET}/resolve/main/{d}"))
         except: pass
-    print(f"+ deltas: {len(gold)} total")
+    print(f"+ {len(deltas)} deltas: {len(gold)} total")
 except Exception as e:
     print(f"Deltas failed: {e}")
 
